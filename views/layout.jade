@@ -1,0 +1,47 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/layout-default-latest.css')
+    link(rel='stylesheet', href='/stylesheets/ui.notify.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
+    #container(style='z-index:10000')
+      #withIcon.hide
+        a.ui-notify-close.ui-notify-cross(href='#', data-notification='\#{idNotification}') x
+        div(style='float: left; margin: 0 15px 10px 0;')
+          img(src='\#{icon}', alt='warning', style='width: 42px;')
+        h1 \#{title}
+        p \#{text}
+    
+    script(src="javascripts/jquery-1.10.2.min.js")
+    script(src="javascripts/jquery-ui-latest.js")
+    script(src="javascripts/jquery.layout-latest.js")
+    script(src="javascripts/jquery.layout.resizeTabLayout-latest.js")
+    script(src="javascripts/jquery.notify.js")
+    script(src="javascripts/ace-src-min/ace.js")
+    script(src="javascripts/jquery.jconsole.js")
+    script
+      var editor = ace.edit("editor");
+      $(document).ready(function() {
+        $('body').layout({ 
+            /* applyDemoStyles: true, */
+            south__minSize: 200,
+            center__onresize: function() {
+                editor.renderer.onResize()
+            }
+         }); 
+
+        $('#console').jconsole({allowExecution:true, symbol: 'cortezcristian@nodewings: ~$ '});
+        
+        $container = $("#container").notify();
+        $container.notify("create", "withIcon", { 
+                    idNotification:'NaN', 
+                    title:'Node Wings', 
+                    text:'Welcome to Node Wings!', 
+                    icon:'/images/Retro-P-Wing-icon.png'
+                    }, { expires:false });
+      });
+      editor.setTheme("ace/theme/twilight");
+      editor.getSession().setMode("ace/mode/javascript");
