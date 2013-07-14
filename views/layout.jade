@@ -22,12 +22,14 @@ html
     script(src="javascripts/jquery.notify.js")
     script(src="javascripts/ace-src-min/ace.js")
     script(src="javascripts/jquery.jconsole.js")
+    script(src="javascripts/jquery.jbrowser.js")
     script
-      var editor = ace.edit("editor");
+      var editor = ace.edit("editor"), NW = {};
       $(document).ready(function() {
         $('body').layout({ 
             /* applyDemoStyles: true, */
             south__minSize: 200,
+            east__size: 450,
             center__onresize: function() {
                 editor.renderer.onResize()
             }
@@ -42,6 +44,11 @@ html
                     text:'Welcome to Node Wings!', 
                     icon:'/images/Retro-P-Wing-icon.png'
                     }, { expires:false });
+        
+        NW.browser = {};
+        NW.browser.his = [];
+        NW.browser.i = 0;
+        $('.browser-nav-bar').jbrowser({his:NW.browser.his, index:NW.browser.i});
       });
       editor.setTheme("ace/theme/twilight");
       editor.getSession().setMode("ace/mode/javascript");
