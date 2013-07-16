@@ -47,6 +47,10 @@ a {
   font-size: 100%;
   display: inline;
 }
+.console .terminal {
+  background-color: transparent;
+  font-size: 16px;
+}
 .browser {
   padding: 0;
 }
