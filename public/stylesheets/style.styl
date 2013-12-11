@@ -1,0 +1,60 @@
+body
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif
+
+a
+  color: #00B7FF
+
+.hide
+  display:none
+
+#editor
+  margin: 0
+  position: absolute
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+
+.console
+  background: #3f2337 /* Old browsers */
+  background: -moz-linear-gradient(top,  #3f2337 1%, #3f2337 5%, #502e46 37%, #56344c 99%) /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(1%,#3f2337), color-stop(5%,#3f2337), color-stop(37%,#502e46), color-stop(99%,#56344c)) /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  #3f2337 1%,#3f2337 5%,#502e46 37%,#56344c 99%) /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  #3f2337 1%,#3f2337 5%,#502e46 37%,#56344c 99%) /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  #3f2337 1%,#3f2337 5%,#502e46 37%,#56344c 99%) /* IE10+ */
+  background: linear-gradient(to bottom,  #3f2337 1%,#3f2337 5%,#502e46 37%,#56344c 99%) /* W3C */
+  -webkit-box-shadow: 2px 3px 2px 0 rgba(0, 0, 0, 0.8)
+  box-shadow:  2px 3px 2px 0 rgba(0, 0, 0, 0.8)
+  height: 200px
+  color: #E7E7E9
+  line-height: 19px
+  input
+    background: none repeat scroll 0 0 transparent
+    border: 0 none
+    margin: 0
+    padding: 0
+    max-width: 300px
+    color: #E7E7E9
+    line-height: 19px
+    font-size: 100%
+    display: inline
+
+.console .terminal
+  background-color: transparent
+  font-size: 16px
+
+//Browser
+.browser
+  padding: 0
+  .browser-nav-bar
+    background: #ccc
+    height:30px
+    list-style: none
+    overflow:hidden
+    padding:0
+    margin:0
+    li
+      float: left
+      input.browser-url
+        margin-top: 4px
+        width: 300px

@@ -1,0 +1,123 @@
+doctype 5
+html
+  head
+    title= title
+    link(rel='stylesheet', href='/stylesheets/layout-default-latest.css')
+    link(rel='stylesheet', href='/stylesheets/ui.notify.css')
+    link(rel='stylesheet', href='/stylesheets/jquery.terminal.css')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body
+    block content
+    #container(style='z-index:10000')
+      #withIcon.hide
+        a.ui-notify-close.ui-notify-cross(href='#', data-notification='\#{idNotification}') x
+        div(style='float: left; margin: 0 15px 10px 0;')
+          img(src='\#{icon}', alt='warning', style='width: 42px;')
+        h1 \#{title}
+        p \#{text}
+    
+    script(src="javascripts/jquery-1.10.2.min.js")
+    script(src="javascripts/jquery-ui-latest.js")
+    script(src="javascripts/jquery.layout-latest.js")
+    script(src="javascripts/jquery.layout.resizeTabLayout-latest.js")
+    script(src="javascripts/jquery.notify.js")
+    script(src="javascripts/ace-src-min/ace.js")
+    //script(src="javascripts/jquery.jconsole.js")
+    script(src="javascripts/jquery.mousewheel-min.js")
+    script(src="javascripts/jquery.terminal-0.7.0.min.js")
+    script(src="javascripts/jquery.jbrowser.js")
+    script(src='/socket.io/socket.io.js')
+    script
+      //Ace Editor
+      var editor = ace.edit("editor"), NW = {}, term;
+      //Sockets
+      var port = (window.location.port=="")?":80":"";
+      var socket = io.connect('http://'+window.location.host+port,{'sync disconnect on unload': true });
+
+      socket.on('cmdResponse', function (data) {
+          console.log('cmdResponse>>',data);
+          if(!data.match(/]2;/)){
+            if(data.match(/.*@.*[$~%#]/)){
+                var prompt = data.replace(/\[m/g,"").replace(/\[1m/g," ").replace(/\[.{0,2}m/g,"");
+                term.set_prompt(prompt);
+            }else{
+                term.echo(data);
+            }
+          }
+          $('.console').scrollTop($('.console')[0].scrollHeight);
+      });
+
+      socket.on('fileReadResponse', function (fName, data) {
+        editor.setValue(data);
+        term.echo('ace-open: file opened '+fName);
+      });
+
+      $(document).ready(function() {
+        //Panels
+        $('body').layout({ 
+            /* applyDemoStyles: true, */
+            south__minSize: 200,
+            east__size: 450,
+            center__onresize: function() {
+                editor.renderer.onResize()
+            }
+         }); 
+        
+        // Terminal
+        //$('#console').jconsole({allowExecution:true, symbol: 'cortezcristian@nodewings: ~$ '});
+
+        term = $('#console').terminal(function(command, term) {
+            if (command !== '') {
+                try {
+                    var params = command.split(' ');
+                    switch(params[0]){
+                        case "ace-open": 
+                            if(params.length!=2){
+                                term.error("ace-open: Two arguments were expected");
+                            }else{
+                                socket.emit("readFile", params[1]);
+                            }
+                        break;
+                        default:
+                            socket.emit("sendCmd", command);
+                        break;
+                    }
+
+                    // Eval JS
+                    /*
+                    var result = window.eval(command);
+                    if (result !== undefined) {
+                        term.echo(new String(result));
+                    }
+                    */
+                } catch(e) {
+                    term.error(new String(e));
+                }
+            } else {
+               term.echo('');
+            }
+        }, {
+            greetings: 'Welcome to Node Wings!',
+            name: 'js_demo',
+            //height: 200,
+            prompt: 'cortezcristian@nodewings: ~$ '
+        });
+        
+        $container = $("#container").notify();
+        $container.notify("create", "withIcon", { 
+                    idNotification:'NaN', 
+                    title:'Node Wings', 
+                    text:'Welcome to Node Wings!', 
+                    icon:'/images/Retro-P-Wing-icon.png'
+                    }, { expires:false });
+        
+        NW.browser = {};
+        NW.browser.his = [];
+        NW.browser.i = 0;
+        $('.browser-nav-bar').jbrowser({his:NW.browser.his, index:NW.browser.i});
+      });
+      editor.setTheme("ace/theme/twilight");
+      editor.setFontSize(16);
+      editor.getSession().setMode("ace/mode/javascript");
+
+

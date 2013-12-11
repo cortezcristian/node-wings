@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  .ui-layout-center
+    pre#editor
+      | var alfa = 1;
+  .ui-layout-north Node Wings
+  .ui-layout-south.console
+    #console
+  .ui-layout-east.browser
+    ul.browser-nav-bar
+      li
+        a.browser-prev-btn(href='#')
+          img(src='./images/browser-prev-btn.png', alt='Browser', height='32', width='32')
+      li
+        a.browser-next-btn(href='#')
+          img(src='./images/browser-next-btn.png', alt='Browser', height='32', width='32')
+      li
+        a.browser-refresh-btn(href='#')
+          img(src='./images/browser-refresh-btn.png', alt='Browser', height='32', width='32')
+      li
+        input.browser-url(type='text', name='browser-url', value='http://localhost/')
+      li
+        a.browser-go-btn(href='#')
+          img(src='./images/browser-go-btn.png', alt='Browser', height='32', width='32')
+    iframe.browser-page-container(src='./browser/index.html', frameborder='0', align='center', scrolling='yes', allowtransparency='false', height="100%", width="100%")
+
+  .ui-layout-west West
+
