@@ -54,6 +54,8 @@
 				'http://www.ruby-lang.org':'http://www.ruby-lang.org',
 				'http://rubular.com/':'http://rubular.com/',
 				'http://nodeshow.com/':'http://nodeshow.com/',
+				'http://cortezcristian.com/':'http://cortezcristian.com/',
+                'http://cortezcristian.com/curso-node-js/material/slides/episodio1.html':'http://cortezcristian.com/curso-node-js/material/slides/episodio1.html',
 				'http://www.ruby-doc.org/core/classes/Regexp.html':'http://www.ruby-doc.org/core/classes/Regexp.html',
 				'http://www.zenspider.com/Languages/Ruby/QuickRef.html':'http://www.zenspider.com/Languages/Ruby/QuickRef.html'
 			},

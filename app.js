@@ -7,7 +7,8 @@ var express = require('express')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
-  , path = require('path');
+  , path = require('path')
+  , Sandbox = require('sandbox');
 
 var app = express();
 
@@ -32,6 +33,14 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+
+app.post('/api/test', function(req, res){
+    var s = new Sandbox();
+    s.run(req.body.script, function(output) {
+          res.json(output.result);
+    });
+    
+});
 
 //http.createServer(app).listen(app.get('port'), function(){
 //  console.log('Express server listening on port ' + app.get('port'));

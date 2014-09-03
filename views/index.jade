@@ -3,7 +3,11 @@ extends layout
 block content
   .ui-layout-center
     pre#editor
-      | var alfa = 1;
+      | var holaMundo = function() {
+      |        return "Hola Mundo";
+      | }
+      | holaMundo();
+
   .ui-layout-north Node Wings
   .ui-layout-south.console
     #console
@@ -25,5 +29,9 @@ block content
           img(src='./images/browser-go-btn.png', alt='Browser', height='32', width='32')
     iframe.browser-page-container(src='./browser/index.html', frameborder='0', align='center', scrolling='yes', allowtransparency='false', height="100%", width="100%")
 
-  .ui-layout-west West
+  .ui-layout-west
+    h2 Ejercicio
+    p Escribir una función que retorne un "Hola Mundo"
+    button#send Corregir
+    #salida
 

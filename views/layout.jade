@@ -58,10 +58,21 @@ html
             /* applyDemoStyles: true, */
             south__minSize: 200,
             east__size: 450,
+            south: {
+                initClosed: true    
+            },
             center__onresize: function() {
                 editor.renderer.onResize()
             }
          }); 
+
+        $('button#send').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $.post('/api/test', { script: editor.getValue() }, function(data){
+                $('#salida').html(data);
+            });
+        });
         
         // Terminal
         //$('#console').jconsole({allowExecution:true, symbol: 'cortezcristian@nodewings: ~$ '});
