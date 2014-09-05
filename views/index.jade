@@ -10,8 +10,14 @@ block content
 
   .ui-layout-north
     p(style="margin:0") 
-      span Coding-Trainer
-      span(style="float:right") Cristian Cortez
+      span(style="line-height: 28px;font-weight: bold;text-transform: uppercase;font-size: 18px;") Coding-Trainer
+        span(style="padding:0 0 2px 20px")
+          button#tedior Editor
+          button#tterm Terminal
+          button#send Corregir
+      span(style="float:right")
+        img(src="./images/avatar.png",style="width: 26px;padding: 0 3px 3px 0; float:left;") 
+        span(style="line-height: 28px;") Cristian Cortez
   .ui-layout-south.console
     #console
   .ui-layout-center.browser
@@ -36,6 +42,5 @@ block content
     iframe#video(src='//www.youtube.com/embed/LvvXfML-ELQ?enablejsapi=1', frameborder='0', width='400', height='300', allowfullscreen='')
     h2 Ejercicio
     p Escribir una función que retorne un "Hola Mundo"
-    button#send Corregir
     #salida
 

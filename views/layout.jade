@@ -1,7 +1,7 @@
 doctype html
 html
   head
-    title= title
+    title Coding Trainer
     link(rel='stylesheet', href='/stylesheets/layout-default-latest.css')
     link(rel='stylesheet', href='/stylesheets/ui.notify.css')
     link(rel='stylesheet', href='/stylesheets/jquery.terminal.css')
@@ -58,7 +58,7 @@ html
             /* applyDemoStyles: true, */
             south__minSize: 200,
             east__size: 450,
-            west__size: 420,
+            west__size: 430,
             center__size: 50,
             east: {
                 initClosed: true, 
@@ -83,12 +83,30 @@ html
             myLayout.toggle('east');
         }
 
+        NW.toggleTerminal = function() {
+            var myLayout = $("body").layout();
+            myLayout.sizePane("south", 280);
+            myLayout.toggle('south');
+        }
+
         $('button#send').click(function(e){
             e.preventDefault();
             e.stopPropagation();
             $.post('/api/test', { script: editor.getValue() }, function(data){
                 $('#salida').html(data);
             });
+        });
+
+        $('button#tedior').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            NW.toggleEditor();
+        });
+        
+        $('button#tterm').click(function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            NW.toggleTerminal();
         });
         
         // Terminal
@@ -132,12 +150,13 @@ html
         });
         
         $container = $("#container").notify();
-        $container.notify("create", "withIcon", { 
+        /*$container.notify("create", "withIcon", { 
                     idNotification:'NaN', 
                     title:'Node Wings', 
                     text:'Welcome to Node Wings!', 
                     icon:'/images/Retro-P-Wing-icon.png'
                     }, { expires:false });
+        */
         
         NW.browser = {};
         NW.browser.his = [];
