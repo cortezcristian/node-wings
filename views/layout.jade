@@ -175,6 +175,14 @@ html
         NW.browser.his = [];
         NW.browser.i = 0;
         $('.browser-nav-bar').jbrowser({his:NW.browser.his, index:NW.browser.i});
+        NW.browser.iframeRef = function(frameRef){
+            return frameRef.contentWindow ? frameRef.contentWindow.document : frameRef.contentDocument
+        };
+        NW.browser.sendClick = function(p){
+            var inside = NW.browser.iframeRef(document.getElementById('navone'));
+            $(inside).find(p || '.navigate-right').click();
+        };
+        //NW.browser.sendClick('.navigate-right')
       });
       editor.setTheme("ace/theme/twilight");
       editor.setFontSize(16);
