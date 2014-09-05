@@ -37,7 +37,7 @@ app.get('/users', user.list);
 app.post('/api/test', function(req, res){
     var s = new Sandbox();
     s.run(req.body.script, function(output) {
-          res.json(output.result);
+          res.json(output);
     });
     
 });

@@ -89,11 +89,24 @@ html
             myLayout.toggle('south');
         }
 
-        $('button#send').click(function(e){
+        $('button.send').click(function(e){
             e.preventDefault();
             e.stopPropagation();
             $.post('/api/test', { script: editor.getValue() }, function(data){
-                $('#salida').html(data);
+                $('#salida').attr("class","");
+                $('#salida').empty();
+                console.log(data);
+                if(data.result=="'Hola Mundo'") {
+                    $('#salida').addClass("success");    
+                    $('#salida').append("<p class='res'>Correcto!!<p>");
+                } else {
+                    $('#salida').addClass("failure");    
+                    $('#salida').append("<p class='res'>Hubo un error:<p>");
+                }
+                $.each(data.console, function(i,v){
+                    $('#salida').append("<p>"+v+"<p>");
+                });
+                $('#salida').append("<p>"+data.result+"<p>");
             });
         });
 
