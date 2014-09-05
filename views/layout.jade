@@ -58,13 +58,30 @@ html
             /* applyDemoStyles: true, */
             south__minSize: 200,
             east__size: 450,
+            west__size: 420,
+            center__size: 50,
+            east: {
+                initClosed: true, 
+                togglerLength_open: 450,
+                maxSize: 0
+            },
             south: {
                 initClosed: true    
             },
-            center__onresize: function() {
-                editor.renderer.onResize()
+            east__onresize: function() {
+                editor.renderer.onResize();
+                editor.renderer.updateFull();
             }
          }); 
+
+        NW.toggleEditor = function() {
+            var myLayout = $("body").layout();
+            if($('.ace_content:visible').size()===0){
+                myLayout.sizePane("east", 4500);
+            }
+
+            myLayout.toggle('east');
+        }
 
         $('button#send').click(function(e){
             e.preventDefault();

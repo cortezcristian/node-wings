@@ -1,17 +1,20 @@
 extends layout
 
 block content
-  .ui-layout-center
+  .ui-layout-east
     pre#editor
       | var holaMundo = function() {
       |        return "Hola Mundo";
       | }
       | holaMundo();
 
-  .ui-layout-north Node Wings
+  .ui-layout-north
+    p(style="margin:0") 
+      span Coding-Trainer
+      span(style="float:right") Cristian Cortez
   .ui-layout-south.console
     #console
-  .ui-layout-east.browser
+  .ui-layout-center.browser
     ul.browser-nav-bar
       li
         a.browser-prev-btn(href='#')
@@ -30,6 +33,7 @@ block content
     iframe.browser-page-container(src='./slides/index.html', frameborder='0', align='center', scrolling='yes', allowtransparency='false', height="100%", width="100%")
 
   .ui-layout-west
+    iframe#video(src='//www.youtube.com/embed/LvvXfML-ELQ?enablejsapi=1', frameborder='0', width='400', height='300', allowfullscreen='')
     h2 Ejercicio
     p Escribir una función que retorne un "Hola Mundo"
     button#send Corregir
