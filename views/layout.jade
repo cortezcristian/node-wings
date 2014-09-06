@@ -311,32 +311,41 @@ html
          },
         'bVbKNHghLZo': {
             'actions': [{
-                'time': 4,
+                'time': 1,
                 'name' : 'eval',
                 'params': [
-                    'NW.browser.sendClick(".navigate-right")',
-                    '$("#tedior").click()',
+                    'NW.browser.sendClick(".navigate-right")'
+                ]
+              },{
+                'time': 27,
+                'name' : 'eval',
+                'params': [
+                    '$("#tedior").click()'
+                ]
+              },{
+                'time': 50,
+                'name' : 'eval',
+                'params': [
                     '$(".send").eq(0).click()'
                 ]
               },{
-                'time': 5,
-                'name' : 'eval',
-                'params': [
-                    'NW.browser.sendClick(".navigate-right")',
-                    '$(".send").eq(0).click()'
-                ]
-              },{
-                'time': 7,
+                'time': 68,
                 'name' : 'wLines',
                 'params': {
                     "2": "error"
                 }
               },{
-                'time': 12,
+                'time': 79,
                 'name' : 'eval',
                 'params': [
                     '$(".send").eq(0).click()',
                     'console.log("exec task 9")'
+                ]
+              },{
+                'time': 86,
+                'name' : 'eval',
+                'params': [
+                    '$("#tedior").click()'
                 ]
             }]
         }
@@ -348,6 +357,25 @@ html
       NW.tutorial.player.start = function(){};
       NW.tutorial.player.stop = function(){};
       NW.tutorial.player.next = function(){};
+
+      NW.playList = [];
+      NW.playListIndex = 0;
+
+      NW.fillList = function(){
+        $('#videoPlaylist li a').each(function(){
+            NW.playList.push($(this).attr('href').replace('#',''));
+        });
+      }
+      NW.fillList();
+
+      $('#videoPlaylist li a:not(.selected)').click(function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $('.selected').removeClass('selected');
+        //just in case to continue from that video
+        NW.playListIndex = $('#videoPlaylist li a').index($(this));
+        NW.playVideo($(this).addClass('selected').attr('href').replace('#',''));
+      });
 
       NW.callNextAction = function(cTime){
         if(typeof NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask] != 'undefined'){    
@@ -447,10 +475,15 @@ html
         var newState = event.data;
         switch(newState){
             case 0:
-                //if(NW.playListIndex<NW.playList.length){
-                    //NW.playListIndex++;
+                if(NW.playListIndex<NW.playList.length){
+                    NW.playListIndex++;
+                    console.log("next>>", NW.playListIndex);
+                    NW.tutorial.player.ctime = 0;
+                    NW.tutorial.player.ctask = 0;
+                    NW.tutorial.player.cvideo = NW.playList[NW.playListIndex];
+                    event.target.loadVideoById(NW.playList[NW.playListIndex]);
                     //$('#videoPlaylist li a').eq(NW.playListIndex).click();
-                //}
+                }
             break;
             case 1:
                 if(!NW.tutorial.started){
