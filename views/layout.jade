@@ -27,6 +27,7 @@ html
     script(src="javascripts/jquery.terminal-0.7.0.min.js")
     script(src="javascripts/jquery.jbrowser.js")
     script(src='/socket.io/socket.io.js')
+    script(src='https://www.youtube.com/iframe_api')
     script.
       //Ace Editor
       var editor = ace.edit("editor"), NW = {}, term;
@@ -188,4 +189,144 @@ html
       editor.setFontSize(16);
       editor.getSession().setMode("ace/mode/javascript");
 
+      //Tutorial
+      NW.tutorial = {}; //namespace for the particular tutorial
+      NW.tutorial.started = false;
+      NW.tutorial.data = {
+        //Video index is the main key
+        'LvvXfML-ELQ': {
+            'actions': [{
+                'time': 2,
+                'name' : 'wConsole',
+                'params':{
+                    "1": "sudo apt-get install ruby1.9.1-full"
+                }
+              },{
+                'time': 4,
+                'name' : 'eval',
+                'params': [
+                    'NW.browser.sendClick(".navigate-right")'
+                ]
+            }]
+        }
+      };
+      NW.tutorial.player = {};
+      NW.tutorial.player.ctime = 0;
+      NW.tutorial.player.ctask = 0;
+      NW.tutorial.player.cvideo = '';
+      NW.tutorial.player.start = function(){};
+      NW.tutorial.player.stop = function(){};
+      NW.tutorial.player.next = function(){};
+
+      NW.callNextAction = function(cTime){
+        if(typeof NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask] != 'undefined'){    
+            console.log(cTime+' - '+NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].time);
+            if(cTime>NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].time){
+                console.log("task"+NW.tutorial.player.ctask);
+                switch(NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].name){
+                    case 'eval':
+                        switch(typeof NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].params){
+                            case 'string':
+                                eval(NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].params);
+                            break;
+                            case 'object':
+                                $.each(NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].params,function(i,v){
+                                    eval(v);
+                                });
+                            break;
+                            default:
+                            break;
+                        }
+                    break;
+                    default:
+                    break;
+                }
+                NW.tutorial.player.ctask++;
+            }
+        }
+      }
+
+      // Process
+      function updatePlayerInfo(o){
+        if(o && o.getDuration) {
+            var ct = o.getCurrentTime();
+            if(ct!=NW.tutorial.player.ctime){
+                console.log(ct);
+                NW.tutorial.player.ctime = ct;
+                NW.callNextAction(ct);
+            }
+            $("#videoDuration").html(o.getDuration());
+            $("#videoCurrentTime").html(o.getCurrentTime());
+            $("#bytesTotal").html(o.getVideoBytesTotal());
+            $("#startBytes").html(o.getVideoStartBytes());
+            $("#bytesLoaded").html(o.getVideoBytesLoaded());
+        }
+      }
+      // Video
+      var tag = document.createElement('script');
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: '300',
+          width: '400',
+          videoId: 'LvvXfML-ELQ',
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+
+        //keep Moving
+        (function(){
+            updatePlayerInfo(player);
+            setTimeout(arguments.callee, '500');
+        })();
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(event) {
+        console.log(event);
+        event.target.playVideo();
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+      function onPlayerStateChange(event) {
+        console.log(event);
+        var newState = event.data;
+        switch(newState){
+            case 0:
+                //if(NW.playListIndex<NW.playList.length){
+                    //NW.playListIndex++;
+                    //$('#videoPlaylist li a').eq(NW.playListIndex).click();
+                //}
+            break;
+            case 1:
+                if(!NW.tutorial.started){
+                    //first video
+                    NW.tutorial.player.cvideo = (event.target.getVideoData())['video_id'];
+                    NW.tutorial.started = true;
+                }
+            break;
+            default:
+            break;
+        }
+        //if (event.data == YT.PlayerState.PLAYING && !done) {
+          //setTimeout(stopVideo, 6000);
+          //done = true;
+        //}
+      }
+
+      function stopVideo() {
+        player.stopVideo();
+      }
 
