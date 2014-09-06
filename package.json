@@ -13,7 +13,7 @@
     "sandbox": "0.8.6",
     "pty.js": "0.2.4"
   },
-  "subdomain": "node-wings",
+  "subdomain": "coding-trainer",
   "engines": {
     "node": "0.10.x"
   }
