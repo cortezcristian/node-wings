@@ -188,6 +188,34 @@ html
       editor.setTheme("ace/theme/twilight");
       editor.setFontSize(16);
       editor.getSession().setMode("ace/mode/javascript");
+      NW.editor = editor;
+      NW.typing = false;
+
+      //Simulate typing: bs = Before Start
+      NW.type = function(txt,bs,cb){
+       var ed=NW.editor, count = 0, ts = 50, bs = bs || function(){}, cb = cb || function(){};
+       (function(){
+            if(!NW.typing){
+                bs.call();
+                NW.typing = true;
+                (function(){
+                    //console.log("cotando... "+count);
+                    if(count==txt.length){
+                        NW.typing = false;
+                        cb.call();
+                        //return;
+                    }else{
+                        ed.insert(txt.charAt(count));
+                        count++;
+                        setTimeout(arguments.callee, ts);
+                    }
+                })();
+            }else{
+                setTimeout(arguments.callee, ts);
+            }
+        })();
+      }
+
 
       //Tutorial
       NW.tutorial = {}; //namespace for the particular tutorial
@@ -197,15 +225,39 @@ html
         'LvvXfML-ELQ': {
             'actions': [{
                 'time': 2,
-                'name' : 'wConsole',
-                'params':{
-                    "1": "sudo apt-get install ruby1.9.1-full"
-                }
+                'name' : 'eval',
+                'params': [
+                    'NW.browser.sendClick(".navigate-right")',
+                    'NW.browser.sendClick(".navigate-right")',
+                    'NW.browser.sendClick(".navigate-down")'
+                ]
               },{
                 'time': 4,
                 'name' : 'eval',
                 'params': [
-                    'NW.browser.sendClick(".navigate-right")'
+                    'NW.browser.sendClick(".navigate-right")',
+                    '$("#tedior").click()',
+                    '$(".send").eq(0).click()'
+                ]
+              },{
+                'time': 5,
+                'name' : 'eval',
+                'params': [
+                    'NW.browser.sendClick(".navigate-right")',
+                    '$(".send").eq(0).click()'
+                ]
+              },{
+                'time': 7,
+                'name' : 'wLines',
+                'params': {
+                    "2": "error"
+                }
+              },{
+                'time': 12,
+                'name' : 'eval',
+                'params': [
+                    '$(".send").eq(0).click()',
+                    'console.log("exec task 9")'
                 ]
             }]
         }
@@ -224,6 +276,17 @@ html
             if(cTime>NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].time){
                 console.log("task"+NW.tutorial.player.ctask);
                 switch(NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].name){
+                    case 'wLines':
+                        $.each(NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].params, function(i,v){
+                            NW.type(v, function(){
+                                NW.editor.gotoLine(parseInt(i));
+                            },
+                            function(){
+                                NW.editor.splitLine();
+                                NW.editor.gotoLine(parseInt(i)+1);
+                            });
+                        });
+                    break;
                     case 'eval':
                         switch(typeof NW.tutorial.data[NW.tutorial.player.cvideo].actions[NW.tutorial.player.ctask].params){
                             case 'string':
